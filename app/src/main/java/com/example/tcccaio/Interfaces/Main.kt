@@ -13,12 +13,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.ui.graphics.Color
 import com.example.tcccaio.DataClass.Exercicio
 import com.example.tcccaio.DataClass.Treino
 
@@ -28,8 +29,6 @@ fun Main(navController: NavController) {
 
     var treinos by remember { mutableStateOf<List<Treino>>(emptyList()) }
     var diaExpandido by remember { mutableStateOf<String?>(null) }
-    val context = LocalContext.current
-    val numeroTreinador = "+5511999999999" // Substitua pelo número real do treinador
 
     // Simular alguns treinos cadastrados (remova isso quando conectar com o banco)
     LaunchedEffect(Unit) {
@@ -139,35 +138,44 @@ fun Main(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Botão WhatsApp
-                    FilledTonalButton(
+                    OutlinedButton(
                         onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                data = Uri.parse("https://wa.me/$numeroTreinador")
-                                setPackage("com.whatsapp")
-                            }
-                            try {
-                                context.startActivity(intent)
-                            } catch (e: Exception) {
-                                // Se o WhatsApp não estiver instalado, abre no navegador
-                                val intentWeb = Intent(Intent.ACTION_VIEW).apply {
-                                    data = Uri.parse("https://wa.me/$numeroTreinador")
-                                }
-                                context.startActivity(intentWeb)
+                            navController.navigate("Main")
+                        },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = Color(0xFF456179), // Azul
+                            contentColor = Color.White // Texto branco
+                        )
+                    ) {
+                        Icon(
+                            Icons.Default.Home,
+                            contentDescription = "Tela Principal",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Inicio")
+                    }
+
+                    Spacer(modifier = Modifier.width(5.dp))
+
+                    OutlinedButton(
+                        onClick = {
+                            navController.navigate("About") {
                             }
                         },
                         modifier = Modifier.weight(1f)
                     ) {
                         Icon(
-                            Icons.Default.Call,
-                            contentDescription = "Contatar Treinador",
+                            Icons.Default.Info,
+                            contentDescription = "Sobre",
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Treinador")
+                        Text("Sobre")
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(5.dp))
 
                     // Botão Sair
                     OutlinedButton(
@@ -226,23 +234,12 @@ fun Main(navController: NavController) {
                     Spacer(modifier = Modifier.height(24.dp))
                     Button(
                         onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                data = Uri.parse("https://wa.me/$numeroTreinador")
-                                setPackage("com.whatsapp")
-                            }
-                            try {
-                                context.startActivity(intent)
-                            } catch (e: Exception) {
-                                val intentWeb = Intent(Intent.ACTION_VIEW).apply {
-                                    data = Uri.parse("https://wa.me/$numeroTreinador")
-                                }
-                                context.startActivity(intentWeb)
-                            }
+                            navController.navigate("Main")
                         }
                     ) {
                         Icon(Icons.Default.Call, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Contatar Treinador")
+                        Text("Tela Principal")
                     }
                 }
             } else {
