@@ -8,32 +8,35 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.tcccaio.DataClass.Aluno
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoutTrainner(navController: NavController) {
 
-    // Estado para a lista de alunos (em uma aplicação real, isso viria do banco de dados)
     var alunos by remember { mutableStateOf<List<Aluno>>(emptyList()) }
-
-    // Estado para controlar qual aluno está selecionado para criar treino
     var alunoSelecionado by remember { mutableStateOf<Aluno?>(null) }
+    val clipboardManager = LocalClipboardManager.current
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    // Simular alguns alunos cadastrados (remova isso quando conectar com o banco)
     LaunchedEffect(Unit) {
         alunos = listOf(
             Aluno(
-                id = "1",
+                id = "123145",
                 nome = "João Silva",
                 idade = "25",
                 altura = "1.75",
@@ -42,7 +45,7 @@ fun MoutTrainner(navController: NavController) {
                 diasTreino = listOf("Segunda-feira", "Quarta-feira", "Sexta-feira")
             ),
             Aluno(
-                id = "2",
+                id = "1212354",
                 nome = "Maria Santos",
                 idade = "30",
                 altura = "1.65",
@@ -51,7 +54,7 @@ fun MoutTrainner(navController: NavController) {
                 diasTreino = listOf("Terça-feira", "Quinta-feira")
             ),
             Aluno(
-                id = "3",
+                id = "1235634",
                 nome = "Carlos Oliveira",
                 idade = "22",
                 altura = "1.80",
@@ -65,14 +68,14 @@ fun MoutTrainner(navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Lista de treinos")},
+                title = { Text("Lista de Alunos") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color(0xff1b2e3a),
                     titleContentColor = Color.White
                 )
             )
         },
-
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             BottomAppBar(
                 modifier = Modifier.height(80.dp)
@@ -107,8 +110,7 @@ fun MoutTrainner(navController: NavController) {
                     FilledTonalButton(
                         onClick = {
                             alunoSelecionado?.let { aluno ->
-                                // Navegar para tela de criar treino
-                                navController.navigate("Create")
+                                navController.navigate("Create/${aluno.id}")
                             }
                         },
                         modifier = Modifier.weight(1f),
@@ -198,6 +200,12 @@ fun MoutTrainner(navController: NavController) {
                                 } else {
                                     aluno
                                 }
+                            },
+                            onCopyId = { id ->
+                                clipboardManager.setText(AnnotatedString(id))
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("ID copiado para a área de transferência")
+                                }
                             }
                         )
                     }
@@ -211,7 +219,8 @@ fun MoutTrainner(navController: NavController) {
 fun AlunoCard(
     aluno: Aluno,
     isSelected: Boolean,
-    onSelect: () -> Unit
+    onSelect: () -> Unit,
+    onCopyId: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -261,6 +270,30 @@ fun AlunoCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // ID com botão de copiar
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "ID: ${aluno.id}",
+                    style = typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
+                IconButton(
+                    onClick = { onCopyId(aluno.id) },
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Copiar ID",
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             // Informações físicas
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -294,7 +327,7 @@ fun AlunoCard(
             // Dias de treino
             if (aluno.diasTreino.isNotEmpty()) {
                 Text(
-                    text = "Dias: ${aluno.diasTreino.joinToString(", ")}",
+                    text = "Dias de treino: ${aluno.diasTreino.joinToString(", ")}",
                     style = typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
