@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -64,14 +65,14 @@ fun MoutTrainner(navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        "MoutTrainner",
-                        style = typography.headlineSmall
-                    )
-                },
+                title = { Text("Lista de treinos")},
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color(0xff1b2e3a),
+                    titleContentColor = Color.White
+                )
             )
         },
+
         bottomBar = {
             BottomAppBar(
                 modifier = Modifier.height(80.dp)

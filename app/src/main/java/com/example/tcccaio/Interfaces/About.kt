@@ -1,7 +1,5 @@
 package com.example.tcccaio.Interfaces
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,30 +12,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonDefaults.outlinedButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBarDefaults.colors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -69,12 +61,12 @@ fun About(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Botão WhatsApp
-                    FilledTonalButton(
+
+                    OutlinedButton(
                         onClick = {
                             navController.navigate("Main")
                         },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     ) {
                         Icon(
                             Icons.Default.Home,
@@ -87,7 +79,6 @@ fun About(navController: NavController) {
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-
                     OutlinedButton(
                         onClick = {
                             navController.navigate("About") {
@@ -95,8 +86,8 @@ fun About(navController: NavController) {
                         },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color(0xFF4C5660), // Azul
-                            contentColor = Color.White // Texto branco
+                            containerColor = Color(0xFF4C5660),
+                            contentColor = Color.White
                         )
                     ) {
                         Icon(
@@ -110,7 +101,6 @@ fun About(navController: NavController) {
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    // Botão Sair
                     OutlinedButton(
                         onClick = {
                             navController.navigate("Login") {

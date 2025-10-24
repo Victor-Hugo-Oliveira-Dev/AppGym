@@ -125,6 +125,10 @@ fun Main(navController: NavController) {
                         style = MaterialTheme.typography.headlineSmall
                     )
                 },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color(0xff1b2e3a),
+                    titleContentColor = Color.White
+                )
             )
         },
         bottomBar = {
